@@ -4,7 +4,7 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOLINT=bin/golangci-lint run
-BINARY_NAME=tnsnames.bin
+BINARY_NAME=tnsnames
 
 DATE=$(shell date +%Y%m%d_%H%M%S)
 VERSION=0.1.0
@@ -36,5 +36,5 @@ lint:
 
 clean:
 	$(GOCLEAN)
-	rm -rf build/
+	rm -f bin/*.bin
 

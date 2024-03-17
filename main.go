@@ -26,7 +26,7 @@ func main() {
 	flag.Parse()
 	input, err := newCharStream(filepath)
 	if err != nil {
-		fmt.Printf("Failed to open example file: %s\n", err)
+		fmt.Printf("Failed to file: %s\n", err)
 		os.Exit(1)
 	}
 	// Create the Lexer
@@ -35,8 +35,13 @@ func main() {
 	// Create the Parser
 	p := tnsnames.NewtnsnamesParser(stream)
 	p.BuildParseTrees = true
-	// add the listener
-
-	// Finally test
-	antlr.ParseTreeWalkerDefault.Walk(&exampleListener{}, p.Tnsnames())
+	// Do the parsing
+	addrs := []Address{}
+	crtAddr := Address{}
+	listener := &CustomTnsNamesListener{addrs, crtAddr, false}
+	antlr.ParseTreeWalkerDefault.Walk(listener, p.Tnsnames())
+	fmt.Printf("Got addresses: %d\n", len(listener.Addresses))
+	for _, addr := range listener.Addresses {
+		fmt.Printf("%s://%s:%s\n", addr.Protocol, addr.Host, addr.Port)
+	}
 }
